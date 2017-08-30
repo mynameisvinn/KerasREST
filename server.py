@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, request, abort
 from keras.models import load_model
 
@@ -18,4 +19,7 @@ def predict():
         return jsonify({"pred_val": predictions})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(
+    	host=os.getenv('LISTEN', '0.0.0.0'),
+    	port=int(os.getenv('PORT', '5000'))
+    	)

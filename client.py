@@ -1,6 +1,7 @@
 import requests
 
 def make_prediction(X_test):
+    # r = requests.put("http://ec2-54-67-101-240.us-west-1.compute.amazonaws.com:5000/api", json={'input': X_test})
     r = requests.put("http://localhost:5000/api", json={'input': X_test})
     resp = r.json()['pred_val']
     return resp
