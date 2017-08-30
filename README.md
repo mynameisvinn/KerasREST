@@ -11,7 +11,7 @@ do `python server.py` to serve model over localhost.
 ### client
 do `python client.py` to call api.
 
-## usage (ec2)
+# usage (ec2)
 ### spin up ec2
 use an existing image `ami-125b2c72` (in the us-west-1 region). this image contains caffe, torch, theano, keras and lasagne. [more information](http://cs231n.github.io/aws-tutorial/).
 
@@ -25,8 +25,26 @@ pip install git+git://github.com/fchollet/keras.git --upgrade --no-deps
 for your ec2 instance, update security policy such that
 tcp is enabled for all incoming traffic for port 5000.
 
+### install
+get da latest
+```bash
+git clone https://github.com/mynameisvinn/KerasREST
+```
 ### server
-do `python server.py`
+```bash
+cd KerasREST
+python server.py
+```
 
 ### client
-from your local machine, do `python client.py`. make sure it points to the correct ec2 instance (eg http://ec2-54-67-101-240.us-west-1.compute.amazonaws.com:5000/api) and not `localhost`.
+from your local machine, do `python client.py`. 
+
+make sure it points to the correct ec2 instance (eg http://ec2-54-67-101-240.us-west-1.compute.amazonaws.com:5000/api) and not `localhost`.
+
+for example:
+```python
+def make_prediction(X_test):
+    # r = requests.put("http://ec2-54-67-101-240.us-west-1.compute.amazonaws.com:5000/api", json={'input': X_test})  # point to your ec2 dns
+    resp = r.json()['pred_val']
+    return resp
+```
