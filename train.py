@@ -1,7 +1,8 @@
+import numpy as np
+
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation
 from keras.optimizers import SGD
-import numpy as np 
 
 def create_model(X, y):
     model = Sequential()
@@ -17,7 +18,7 @@ def create_model(X, y):
 if __name__ == '__main__':
     X = np.array([[0,0],[0,1],[1,0],[1,1]], "float32")
     y = np.array([[0],[1],[1],[0]], "float32")
-    
+
     m = create_model(X, y)
     m.save("models/xor.h5")
 
