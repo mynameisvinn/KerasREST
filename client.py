@@ -1,4 +1,4 @@
-from flask import request
+import requests
 
 def make_prediction(X_test):
     r = requests.put("http://localhost:5000/api", json={'input': X_test})
@@ -11,5 +11,6 @@ def nb_layers():
 
 if __name__ == '__main__':
     X_inputs = [[1, 1], [0, 1]]
+    pred = make_prediction(X_inputs)
     for i in zip(X_inputs, pred):
         print i
