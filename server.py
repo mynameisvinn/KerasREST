@@ -5,6 +5,10 @@ from keras.models import load_model
 app = Flask(__name__)
 model = load_model("models/xor.h5")
 
+@app.route('/')
+def hello_world():
+    return 'Flask Dockerized'
+
 @app.route('/api', methods=['GET'])
 def get_tasks():
     return jsonify({'n_layers': len(model.layers)})
