@@ -28,6 +28,9 @@ def get_nlayers():
 def predict():
     """
     response when a PUT request is sent to localhost:5000/api.
+
+    queries the model, already loaded in memory, and returns 
+    predictions in json. 
     """
     if not request.json or not 'input' in request.json:
         abort(400)
@@ -36,7 +39,4 @@ def predict():
         return jsonify({"pred_val": predictions})
 
 if __name__ == '__main__':
-    app.run(
-    	host=os.getenv('LISTEN', '0.0.0.0'),
-    	port=int(os.getenv('PORT', '5000'))
-    	)
+    app.run(host=os.getenv('LISTEN', '0.0.0.0'), port=int(os.getenv('PORT', '5000')))
