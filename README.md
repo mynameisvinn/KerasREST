@@ -1,56 +1,44 @@
-# KerasREST
-bare bones example of deploying keras model through REST.
+# keras server
+deploying keras model through rest.
 
-## option 1: usage (localhost)
-### 1a: train model
-use `python train.py` to train a simple neural network to classify XOR.
+## training the model
+run `python train.py` to train a XOR model. we'll keep it simple and use a binary classifier with a 1 single hidden layer.
 
-### 1b: server
-do `python server.py` to serve model locally.
+## deploying
+### option 1: local
+assuming a trained model exists, run:
+```bash
+python server.py
+python client.py  # separate terminal
+```
 
-### 1c: client
-do `python client.py` to call api.
+### option 2: docker
+first, build docker image with `docker build -t mynameisvinn/kerasrest .` (dont forget the period).
 
-## option 2: usage (docker)
-### 2a: build docker image
-build docker image with `docker build -t mynameisvinn/kerasrest .` (dont forget the period).
+then, run docker with `docker run -d -p 5000:5000 mynameisvinn/kerasrest`. the argument `-p 5000:5000` binds the container's port to local port.
 
-### 2b: run docker
-run docker in detached mode with `docker run -d -p 5000:5000 mynameisvinn/kerasrest`. 
+finally, from another terminal, run `python client.py`. remember, docker containers are *virtual machines* and therefore have unique ip addresses; youll need your container's ip, which can be found by `docker-machine ip default`. 
 
-note that `-p 5000:5000` is critical to bind container port to your local machine.
-
-### 2c: client
-from local machine, do `python client.py`. youll need to use your docker's container IP, which can be found by `docker-machine ip default`.
-
-## option 3: usage (remote ec2)
-### 3a: spin up ec2
+### option 3: ec2
+#### spin up ec2 and provision
 use an existing image `ami-125b2c72` (in the us-west-1 region). this image contains caffe, torch, theano, keras and lasagne. [more information](http://cs231n.github.io/aws-tutorial/).
 
-### 3b: update keras
-get the latest version of keras with:
+youll need the latest version of keras:
 ```bash
 pip install git+git://github.com/fchollet/keras.git --upgrade --no-deps
 ```
-### 3c: update security
-for your ec2 instance, update security policy such that
-tcp is enabled for all incoming traffic for port 5000.
 
-### 3d: install
-get da latest
+since we'll be remotely calling this instance, we'll need to update security policy such that port 5000 is open to all incoming traffic.
+
+finally, ssh into this instance, clone this repo, and run:
 ```bash
 git clone https://github.com/mynameisvinn/KerasREST
-```
-### 3e: server
-```bash
 cd KerasREST
 python server.py
 ```
 
-### 3f: client
-from your local machine, do `python client.py`. 
-
-make sure it points to the correct ec2 instance (eg http://ec2-54-67-101-240.us-west-1.compute.amazonaws.com:5000/api) and not `localhost`.
+#### client rest calls
+from your local machine, run `python client.py`. make sure it points to the correct ec2 instance (eg http://ec2-54-67-101-240.us-west-1.compute.amazonaws.com:5000/api) and not `localhost`.
 
 for example:
 ```python

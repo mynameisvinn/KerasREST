@@ -6,16 +6,29 @@ app = Flask(__name__)
 model = load_model("models/xor.h5")
 
 @app.route('/')
-def hello_world():
-    return 'Flask Dockerized'
+def landing():
+    """
+    default action for localhost:5000
+
+    # https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask
+    """
+    return "hello world!"
 
 @app.route('/api', methods=['GET'])
-def get_tasks():
+def get_nlayers():
+    """
+    response when a GET request is sent to localhost:5000/api.
+
+    returns a json object specifying number of layers in xor model.
+    """
     return jsonify({'n_layers': len(model.layers)})
 
-# https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask
+
 @app.route('/api', methods=['PUT'])
 def predict():
+    """
+    response when a PUT request is sent to localhost:5000/api.
+    """
     if not request.json or not 'input' in request.json:
         abort(400)
     else:
